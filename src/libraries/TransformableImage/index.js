@@ -30,7 +30,7 @@ export default class TransformableImage extends PureComponent {
         enableScale: true,
         enableTranslate: true,
         imageComponent: undefined,
-        resizeMode: 'contain'
+        resizeMode: 'cover'
     };
 
     constructor (props) {
@@ -142,7 +142,7 @@ export default class TransformableImage extends PureComponent {
 
     render () {
         const { imageDimensions, viewWidth, viewHeight, error, keyAccumulator, imageLoaded } = this.state;
-        const { style, image, imageComponent, resizeMode, enableTransform, enableScale, enableTranslate, onTransformGestureReleased, onViewTransformed } = this.props;
+        const { style, image, imageComponent, resizeMode, enableTransform, enableScale, enableTranslate, onTransformGestureReleased, onViewTransformed, imageWidth } = this.props;
 
         let maxScale = 1;
         let contentAspectRatio;
@@ -165,14 +165,19 @@ export default class TransformableImage extends PureComponent {
             ...this.props,
             imageLoaded,
             source: image.source,
-            style: [style, { backgroundColor: 'transparent' }],
+            style: [style, {
+                backgroundColor: 'transparent',
+                width: imageWidth,
+                // transform: [{ translateX: -imageWidth/4 }]
+            }],
             resizeMode: resizeMode,
             onLoadStart: this.onLoadStart,
             onLoad: this.onLoad,
             capInsets: { left: 0.1, top: 0.1, right: 0.1, bottom: 0.1 }
         };
 
-        const content = imageComponent ? imageComponent(imageProps, imageDimensions) : <Image { ...imageProps } />;
+        const content = imageComponent ? imageComponent(imageProps, imageDimensions.width) : 
+        <Image { ...imageProps } />;
 
         return (
             <ViewTransformer
@@ -187,7 +192,7 @@ export default class TransformableImage extends PureComponent {
               maxScale={maxScale}
               contentAspectRatio={contentAspectRatio}
               onLayout={this.onLayout}
-              style={style}>
+              style={[style, {overflow: 'hidden'}]}>
                 { error ? this.renderError() : content }
             </ViewTransformer>
         );

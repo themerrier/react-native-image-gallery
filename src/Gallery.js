@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, ViewPropTypes } from 'react-native';
+import { View, ViewPropTypes, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { createResponder } from './libraries/GestureResponder';
 import TransformableImage from './libraries/TransformableImage';
@@ -8,6 +8,8 @@ import ViewPager from './libraries/ViewPager';
 const DEFAULT_FLAT_LIST_PROPS = {
     windowSize: 3
 };
+
+console.log("GALLERY SRC UPDATE")
 
 export default class Gallery extends PureComponent {
     static propTypes = {
@@ -25,14 +27,18 @@ export default class Gallery extends PureComponent {
         removeClippedSubviews: PropTypes.bool,
         imageComponent: PropTypes.func,
         errorComponent: PropTypes.func,
-        flatListProps: PropTypes.object
+        flatListProps: PropTypes.object,
+        resizeMode: PropTypes.string,
+        imageWidth: PropTypes.number
     };
 
     static defaultProps = {
         removeClippedSubviews: true,
         imageComponent: undefined,
         scrollViewStyle: {},
-        flatListProps: DEFAULT_FLAT_LIST_PROPS
+        flatListProps: DEFAULT_FLAT_LIST_PROPS,
+        resizeMode: 'cover',
+        imageWidth: Dimensions.get('window').width
     };
 
     imageRefs = new Map();
@@ -225,7 +231,7 @@ export default class Gallery extends PureComponent {
     }
 
     renderPage (pageData, pageId) {
-        const { onViewTransformed, onTransformGestureReleased, errorComponent, imageComponent } = this.props;
+        const { onViewTransformed, onTransformGestureReleased, errorComponent, imageComponent, resizeMode, imageWidth } = this.props;
         return (
             <TransformableImage
               onViewTransformed={((transform) => {
@@ -240,6 +246,8 @@ export default class Gallery extends PureComponent {
               errorComponent={errorComponent}
               imageComponent={imageComponent}
               image={pageData}
+              resizeMode={resizeMode}
+              imageWidth={imageWidth}
             />
         );
     }

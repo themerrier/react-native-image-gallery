@@ -30,7 +30,8 @@ export default class ViewPager extends PureComponent {
         onPageSelected: PropTypes.func,
         onPageScrollStateChanged: PropTypes.func,
         onPageScroll: PropTypes.func,
-        flatListProps: PropTypes.object
+        flatListProps: PropTypes.object,
+        initialNumToRender: PropTypes.number,
     };
 
     static defaultProps = {
@@ -40,7 +41,8 @@ export default class ViewPager extends PureComponent {
         pageDataArray: [],
         initialListSize: 10,
         removeClippedSubviews: true,
-        flatListProps: {}
+        flatListProps: {},
+        initialNumToRender: 2
     };
 
     currentPage = undefined; // Do not initialize to make onPageSelected(0) be dispatched
@@ -260,7 +262,7 @@ export default class ViewPager extends PureComponent {
     }
 
     keyExtractor (item, index) {
-        return index;
+        return index.toString();
     }
 
     renderRow ({ item, index }) {
@@ -325,7 +327,7 @@ export default class ViewPager extends PureComponent {
                   data={pageDataArray}
                   renderItem={this.renderRow}
                   onLayout={this.onLayout}
-
+                  initialNumToRender={this.props.initialNumToRender}
                   // use contentOffset instead of initialScrollIndex so that we don't have
                   // to use the buggy 'getItemLayout' prop. See
                   // https://github.com/facebook/react-native/issues/15734#issuecomment-330616697 and
