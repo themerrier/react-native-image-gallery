@@ -9,8 +9,6 @@ const DEFAULT_FLAT_LIST_PROPS = {
     windowSize: 3
 };
 
-console.log("GALLERY SRC UPDATE")
-
 export default class Gallery extends PureComponent {
     static propTypes = {
         ...View.propTypes,
@@ -29,7 +27,8 @@ export default class Gallery extends PureComponent {
         errorComponent: PropTypes.func,
         flatListProps: PropTypes.object,
         resizeMode: PropTypes.string,
-        imageWidth: PropTypes.number
+        imageWidth: PropTypes.number,
+        offset: PropTypes.number
     };
 
     static defaultProps = {
@@ -38,7 +37,8 @@ export default class Gallery extends PureComponent {
         scrollViewStyle: {},
         flatListProps: DEFAULT_FLAT_LIST_PROPS,
         resizeMode: 'cover',
-        imageWidth: Dimensions.get('window').width
+        imageWidth: Dimensions.get('window').width,
+        offset: -(Dimensions.get('window').width)/4
     };
 
     imageRefs = new Map();
@@ -231,7 +231,7 @@ export default class Gallery extends PureComponent {
     }
 
     renderPage (pageData, pageId) {
-        const { onViewTransformed, onTransformGestureReleased, errorComponent, imageComponent, resizeMode, imageWidth } = this.props;
+        const { onViewTransformed, onTransformGestureReleased, errorComponent, imageComponent, resizeMode, imageWidth, offset } = this.props;
         return (
             <TransformableImage
               onViewTransformed={((transform) => {
@@ -248,6 +248,7 @@ export default class Gallery extends PureComponent {
               image={pageData}
               resizeMode={resizeMode}
               imageWidth={imageWidth}
+              offset={offset}
             />
         );
     }

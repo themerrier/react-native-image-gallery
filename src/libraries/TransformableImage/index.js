@@ -142,7 +142,8 @@ export default class TransformableImage extends PureComponent {
 
     render () {
         const { imageDimensions, viewWidth, viewHeight, error, keyAccumulator, imageLoaded } = this.state;
-        const { style, image, imageComponent, resizeMode, enableTransform, enableScale, enableTranslate, onTransformGestureReleased, onViewTransformed, imageWidth } = this.props;
+        const { style, image, imageComponent, resizeMode, enableTransform, enableScale, 
+            enableTranslate, onTransformGestureReleased, onViewTransformed, imageWidth, offset } = this.props;
 
         let maxScale = 1;
         let contentAspectRatio;
@@ -168,7 +169,7 @@ export default class TransformableImage extends PureComponent {
             style: [style, {
                 backgroundColor: 'transparent',
                 width: imageWidth,
-                // transform: [{ translateX: -imageWidth/4 }]
+                transform: [{ translateX: offset }]
             }],
             resizeMode: resizeMode,
             onLoadStart: this.onLoadStart,
