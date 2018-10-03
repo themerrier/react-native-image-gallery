@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { View, Text, Image, ViewPropTypes } from 'react-native';
+import { View, Text, ViewPropTypes, Image } from 'react-native';
+import SmartImage from '../Image'
 import PropTypes from 'prop-types';
 import ViewTransformer from '../ViewTransformer';
 
@@ -10,7 +11,11 @@ export default class TransformableImage extends PureComponent {
                 PropTypes.object,
                 PropTypes.number
             ]).isRequired,
-            dimensions: PropTypes.shape({ width: PropTypes.number, height: PropTypes.number })
+            sourceThumb:  PropTypes.oneOfType([
+                PropTypes.object,
+                PropTypes.number
+            ]),
+            dimensions: PropTypes.shape({ width: PropTypes.number, height: PropTypes.number }),
         }).isRequired,
         style: ViewPropTypes ? ViewPropTypes.style : View.propTypes.style,
         onLoad: PropTypes.func,
@@ -166,6 +171,7 @@ export default class TransformableImage extends PureComponent {
             ...this.props,
             imageLoaded,
             source: image.source,
+            sourceThumb: image.sourceThumb,
             style: [style, {
                 backgroundColor: 'transparent',
                 width: imageWidth,
@@ -177,8 +183,8 @@ export default class TransformableImage extends PureComponent {
             capInsets: { left: 0.1, top: 0.1, right: 0.1, bottom: 0.1 }
         };
 
-        const content = imageComponent ? imageComponent(imageProps, imageDimensions.width) : 
-        <Image { ...imageProps } />;
+        const content = imageComponent ? <imageComponent imageProps={imageProps} width={imageDimensions.width} /> : 
+        <SmartImage { ...imageProps } />;
 
         return (
             <ViewTransformer
